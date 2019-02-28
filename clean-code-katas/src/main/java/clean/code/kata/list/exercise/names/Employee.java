@@ -5,33 +5,35 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-class DtaRcrd102 {
+class Employee {
 
     private static final int COMMISSIONED = 0;
     private static final int HOURLY = 1;
+    private static final int WEEK_HOURS = 1;
+
     private int id;
     private String n;
     private String lst_n;
-    private Date genymdhms;
-    private Date modymdhms;
+    private Date inputDate;
+    private Date outputDate;
     private int type;
     private double pay;
     private double cmsion;
 
-    public Date getGenymdhms() {
-	return genymdhms;
+    public Date getInputDate() {
+	return inputDate;
     }
 
-    public void setGenymdhms(Date genymdhms) {
-	this.genymdhms = genymdhms;
+    public void setInputDate(Date inputDate) {
+	this.inputDate = inputDate;
     }
 
-    public Date getModymdhms() {
-	return modymdhms;
+    public Date getOutputDate() {
+	return outputDate;
     }
 
-    public void setModymdhms(Date modymdhms) {
-	this.modymdhms = modymdhms;
+    public void setOutputDate(Date outputDate) {
+	this.outputDate = outputDate;
     }
 
     public int getType() {
@@ -89,7 +91,7 @@ class DtaRcrd102 {
      * @return
      * @throws InvalidEmployeeType
      */
-    public Money calculatePay(DtaRcrd102 e) throws InvalidEmployeeType {
+    public Money calculatePay(Employee e) throws InvalidEmployeeType {
 	switch (e.type) {
 	case COMMISSIONED:
 	    return calculateCommissioned(e);
@@ -100,21 +102,19 @@ class DtaRcrd102 {
 	}
     }
 
-    private Money calculateHourlyPay(DtaRcrd102 e) {
-	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-	long diffInMillies = Math.abs(e.getModymdhms().getTime() - e.getGenymdhms().getTime());
-	long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-	//if is different to 40 then calculate pay
-	if (diff > 40) {
-	    long extraHours = diff - 40;
-	    pay = (40 * e.getPay()) + (extraHours * e.getPay());
-	} else
-	    pay = diff * e.getPay();
-
+    private Money calculateHourlyPay(Employee employee) {
+	long differenceInMillieSeconds = Math
+		.abs(employee.getOutputDate().getTime() - employee.getInputDate().getTime());
+	long workingHours = TimeUnit.HOURS.convert(differenceInMillieSeconds, TimeUnit.MILLISECONDS);
+	pay = workingHours * employee.getPay();
+	if (workingHours > WEEK_HOURS) {
+	    long extraHours = workingHours - WEEK_HOURS;
+	    pay = (WEEK_HOURS * employee.getPay()) + (extraHours * employee.getPay());
+	}
 	return new Money(pay);
     }
 
-    private Money calculateCommissioned(DtaRcrd102 e) {
+    private Money calculateCommissioned(Employee e) {
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 	long diffInMillies = Math.abs(e.getModymdhms().getTime() - e.getGenymdhms().getTime());
 	long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
