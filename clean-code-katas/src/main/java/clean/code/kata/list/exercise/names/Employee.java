@@ -94,7 +94,7 @@ class Employee {
     public Money calculatePay(Employee e) throws InvalidEmployeeType {
 	switch (e.type) {
 	case COMMISSIONED:
-	    return calculateCommissioned(e);
+	//    return calculateCommissioned(e);
 	case HOURLY:
 	    return calculateHourlyPay(e);
 	default:
@@ -113,7 +113,7 @@ class Employee {
 	}
 	return new Money(pay);
     }
-
+/*
     private Money calculateCommissioned(Employee e) {
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 	long diffInMillies = Math.abs(e.getModymdhms().getTime() - e.getGenymdhms().getTime());
@@ -127,4 +127,5 @@ class Employee {
 
 	return new Money(pay * 30 * e.getCmsion());
     }
+    */
 }
