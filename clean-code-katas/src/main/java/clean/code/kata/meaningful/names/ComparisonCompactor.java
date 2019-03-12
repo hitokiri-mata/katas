@@ -3,49 +3,49 @@ package clean.code.kata.meaningful.names;
 import junit.framework.Assert;
 
 public class ComparisonCompactor {
-    private int ctxt;
-    private String s1;
-    private String s2;
-    private int pfx;
-    private int sfx;
+    private int context;
+    private String firstString;
+    private String secondString;
+    private int prefixIndex;
+    private int suffix;
 
-    public ComparisonCompactor(int ctxt, String s1, String s2) {
-	this.ctxt = ctxt;
-	this.s1 = s1;
-	this.s2 = s2;
+    public ComparisonCompactor(int context, String firstString, String secondString) {
+	this.context = context;
+	this.firstString = firstString;
+	this.secondString = secondString;
     }
 
-    public String compact(String msg) {
-	if (s1 == null || s2 == null || s1.equals(s2))
-	    return Assert.format(msg, s1, s2);
+    public String compact(String message) {
+	if (firstString == null || secondString == null || firstString.equals(secondString))
+	    return Assert.format(message, firstString, secondString);
 
-	pfx = 0;
-	for (; pfx < Math.min(s1.length(), s2.length()); pfx++) {
-	    if (s1.charAt(pfx) != s2.charAt(pfx))
+	prefixIndex = 0;
+	for (; prefixIndex < Math.min(firstString.length(), secondString.length()); prefixIndex++) {
+	    if (firstString.charAt(prefixIndex) != secondString.charAt(prefixIndex))
 		break;
 	}
-	int sfx1 = s1.length() - 1;
-	int sfx2 = s2.length() - 1;
-	for (; sfx2 >= pfx && sfx >= pfx; sfx2--, sfx1--) {
-	    if (s1.charAt(sfx1) != s2.charAt(sfx2))
+	int firstStringSuffixIndex = firstString.length() - 1;
+	int secondStringSuffixIndex = secondString.length() - 1;
+	for (; secondStringSuffixIndex >= prefixIndex && suffix >= prefixIndex; secondStringSuffixIndex--, firstStringSuffixIndex--) {
+	    if (firstString.charAt(firstStringSuffixIndex) != secondString.charAt(secondStringSuffixIndex))
 		break;
 	}
-	sfx = s1.length() - sfx1;
-	String cmp1 = compactString(s1);
-	String cmp2 = compactString(s2);
+	suffix = firstString.length() - firstStringSuffixIndex;
+	String cmp1 = compactString(firstString);
+	String cmp2 = compactString(secondString);
 
-	return Assert.format(msg, cmp1, cmp2);
+	return Assert.format(message, cmp1, cmp2);
 
     }
 
     private String compactString(String s) {
-	String result = "(" + s.substring(pfx, s.length() - sfx + 1) + ")";
-	if (pfx > 0)
-	    result = (pfx > ctxt ? "..." : "") + s1.substring(Math.max(0, pfx - ctxt), pfx) + result;
-	if (sfx > 0) {
-	    int end = Math.min(s1.length() - sfx + 1 + ctxt, s1.length());
-	    result = result + (s1.substring(s1.length() - sfx + 1, end)
-		    + (s1.length() - sfx + 1 < s1.length() - ctxt ? "..." : ""));
+	String result = "(" + s.substring(prefixIndex, s.length() - suffix + 1) + ")";
+	if (prefixIndex > 0)
+	    result = (prefixIndex > context ? "..." : "") + firstString.substring(Math.max(0, prefixIndex - context), prefixIndex) + result;
+	if (suffix > 0) {
+	    int end = Math.min(firstString.length() - suffix + 1 + context, firstString.length());
+	    result = result + (firstString.substring(firstString.length() - suffix + 1, end)
+		    + (firstString.length() - suffix + 1 < firstString.length() - context ? "..." : ""));
 	}
 	return result;
     }
