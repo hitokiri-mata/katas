@@ -36,7 +36,7 @@ public class TestAuthenticationEndpoint extends JerseyTest {
 	loginForm.param("password", "78910");
 	Response response = target("/authentication").request()
 		.post(Entity.entity(loginForm, MediaType.APPLICATION_FORM_URLENCODED));
-	assertEquals("Should return status 403", Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+	assertEquals("Should return status 404", Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
 
 }
