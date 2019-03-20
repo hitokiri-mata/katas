@@ -15,12 +15,13 @@ public class AuthenticationEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String password) {
+    public Response authenticateUser(@FormParam("target") String target, @FormParam("username") String username,
+	    @FormParam("password") String password) {
 	Status httpStatus;
 	String securityToken = new String();
 	try {
 	    // Authenticate the user using the credentials provided
-	    authenticate(username, password);
+	    authenticate(target, username, password);
 	    // Issue a token for the user
 	    securityToken = issueToken(username);
 	    // Return the HTTP 200 status into response
@@ -31,8 +32,8 @@ public class AuthenticationEndpoint {
 	return Response.status(httpStatus).entity(securityToken).build();
     }
 
-    private void authenticate(String username, String password) throws Exception {
-	if (!"cmatdeav".equals(username) || !"12345".equals(password)) {
+    private void authenticate(String target, String username, String password) throws Exception {
+	if (!"cmatdeav".equals(username) || !"12345".equals(password) || !"google".equals(target)) {
 	    throw new NotAuthorizedException();
 	}
     }

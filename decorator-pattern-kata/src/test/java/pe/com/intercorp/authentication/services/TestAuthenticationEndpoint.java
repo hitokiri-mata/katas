@@ -22,6 +22,7 @@ public class TestAuthenticationEndpoint extends JerseyTest {
     @Test
     public void sussesfullyAuthentication() {
 	Form loginForm = new Form();
+	loginForm.param("target", "google");
 	loginForm.param("username", "cmatdeav");
 	loginForm.param("password", "12345");
 	Response response = target("/authentication").request()
@@ -32,6 +33,7 @@ public class TestAuthenticationEndpoint extends JerseyTest {
     @Test
     public void badCredentialAuthentication() {
 	Form loginForm = new Form();
+	loginForm.param("target", "google");
 	loginForm.param("username", "cmatdeav");
 	loginForm.param("password", "78910");
 	Response response = target("/authentication").request()
